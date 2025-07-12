@@ -1,0 +1,82 @@
+basePath: /
+definitions:
+  main.Booking:
+    type: object
+host: localhost:3002
+info:
+  contact: {}
+  description: Service for managing concert ticket bookings.
+  title: Booking Service API
+  version: "1.0"
+paths:
+  /bookings:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new booking with PENDING status and triggers payment.
+      parameters:
+      - description: Booking Info
+        in: body
+        name: booking
+        required: true
+        schema:
+          $ref: '#/definitions/main.Booking'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Booking'
+      summary: Create a new booking
+      tags:
+      - bookings
+  /bookings/{id}:
+    get:
+      description: Get booking details by ID
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Booking'
+      summary: Get a booking by ID
+      tags:
+      - bookings
+  /bookings/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the status of a booking, usually called by payment-service
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New Status
+        in: body
+        name: status
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Booking'
+      summary: Update booking status (internal)
+      tags:
+      - bookings
+swagger: "2.0"
